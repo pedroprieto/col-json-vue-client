@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <button @click="getData">getdata</button>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -89,6 +90,11 @@ export default {
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
+    }
+  },
+  methods: {
+    getData: function() {
+      this.$emit('get');
     }
   }
 }
