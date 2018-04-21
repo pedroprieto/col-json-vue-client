@@ -12,7 +12,7 @@
   <!-- Listening to events: https://vuejs.org/v2/guide/events.html -->
   
   <!-- Props: https://vuejs.org/v2/guide/components.html#Dynamic-Props -->
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav v-if="linkGroups.mainNav" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="https://bulma.io">
         <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
@@ -26,10 +26,20 @@
     </div>
     <div class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" v-for="link in links" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+        <a class="navbar-item" v-for="link in linkGroups.mainNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
       </div>
     </div>
   </nav> 
+  
+  <div v-if="linkGroups.secondaryNav">
+    <a class="" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+  </div>
+
+  <!-- Pagination -->
+  <nav v-if="linkGroups.prev || linkGroups.next" class="pagination" role="navigation" aria-label="pagination">
+    <a v-if="linkGroups.prev" @click="processLink(linkGroups.prev,$event)" class="pagination-previous">{{linkGroups.prev.prompt}}</a>
+    <a v-if="linkGroups.next" @click="processLink(linkGroups.next,$event)" class="pagination-next">{{linkGroups.next.prompt}}</a> 
+  </nav>
 
 </div>
 
@@ -46,6 +56,26 @@ export default {
   ],
   data: function() {
     return {
+    }
+  },
+  computed: {
+    linkGroups: function() {
+      return this.links.reduce(function (res, el) {
+        if ( el.rel.includes('current')) {
+          res.current= el;
+        } else if (el.rel.includes('prev')) {
+          res.prev = el;
+        } else if (el.rel.includes('next')) {
+          res.next = el;
+        } else if (el.rel.includes('secondary')) {
+          res.secondaryNav.push(el);
+        } else {
+          // Main nav link
+          res.mainNav.push(el);
+        }
+        return res;
+      }, {current: null, prev: null, next: null, mainNav: [], secondaryNav: []});
+      
     }
   },
   components: {
