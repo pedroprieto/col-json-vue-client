@@ -8,7 +8,7 @@
   <main>
     <!--  links Container  -->
     <CollectionLinks :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
-    
+
     <!-- Template Container -->
     <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
 
@@ -36,6 +36,13 @@ export default {
   created: function() {
     // AJAX request to /api (entry point of the app)
     this.readCollection('/api');
+    // History back
+    // Attach onpopstate event handler
+    if (typeof window !== 'undefined') {
+      window.onpopstate = function(event) {
+        this.readCollection(event.state.path, true);
+      }.bind(this);
+    }
   },
   
   // Component data
@@ -54,7 +61,7 @@ export default {
   
   // Methods
   methods: {
-    readCollection: function(url) {
+    readCollection: function(url, noPush) {
 	    // Method to do a GET request to a URL
 	    // It must be called when the user clicks on a LINK
 	    // url: URL of the selected link (the "href" property of the link)
@@ -63,6 +70,9 @@ export default {
         .then(response => {
           // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
           this.c = response.data;
+          // History state
+          if (! noPush)
+	          window.history.pushState({path: url}, this.c.collection.title, url);
         })
         .catch(e => {
           // If error, display in console
