@@ -34,6 +34,10 @@
   <div v-if="linkGroups.secondaryNav">
     <a class="" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
   </div>
+  
+  <div v-if="linkGroups.upNav">
+    <a class="" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+  </div>
 
   <!-- Pagination -->
   <nav v-if="linkGroups.prev || linkGroups.next" class="pagination" role="navigation" aria-label="pagination">
@@ -69,12 +73,14 @@ export default {
           res.next = el;
         } else if (el.rel.includes('secondary')) {
           res.secondaryNav.push(el);
+        } else if (el.rel.includes('up')) {
+          res.upNav.push(el);
         } else {
           // Main nav link
           res.mainNav.push(el);
         }
         return res;
-      }, {current: null, prev: null, next: null, mainNav: [], secondaryNav: []});
+      }, {current: null, prev: null, next: null, mainNav: [], secondaryNav: [], upNav: []});
       
     }
   },
