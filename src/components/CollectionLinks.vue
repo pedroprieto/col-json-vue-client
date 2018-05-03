@@ -17,18 +17,28 @@
       <div class="navbar-start">
         <a class="navbar-item" v-for="link in linkGroups.mainNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
       </div>
+      <div class="navbar-end">
+        <a class="navbar-item" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+      </div>
     </div>
   </nav> 
   
-  <nav class="level-left" v-if="linkGroups.secondaryNav">
-    <a class="level-item" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
-    <hr>
-  </nav>
+  <!-- Collection Title -->
+  <section class="hero is-light">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          {{title}}
+        </h1>
+      </div>
+    </div>
+  </section>
   
   <nav class="level-left" v-if="linkGroups.upNav">
     <a class="level-item" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
   </nav>
-
+  
+  
   <!-- Pagination -->
   <nav v-if="linkGroups.prev || linkGroups.next" class="pagination level" role="navigation" aria-label="pagination">
     <a v-if="linkGroups.prev" @click="processLink(linkGroups.prev,$event)" class="pagination-previous">{{linkGroups.prev.prompt}}</a>
@@ -46,7 +56,8 @@ export default {
   /* https://vuejs.org/v2/guide/components.html#Dynamic-Props*/
   props: [
     // This prop stores the collection.links array
-    'links'
+    'links',
+    'title'
   ],
   data: function() {
     return {

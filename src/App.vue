@@ -1,20 +1,16 @@
 <template>
 <div id="app">
-  <header>
-    <!-- Display collection title -->
-    <h1 class="text-center">{{c.collection.title}}</h1>
-  </header>
   
   <main>
     <!--  links Container  -->
-    <CollectionLinks :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
-
+    <CollectionLinks :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
+    
     <!-- Template Container -->
     <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
 
     <!--  items Container  -->
     <CollectionItems :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection"></CollectionItems>
-    
+
   </main>
 </div>
 </template>
