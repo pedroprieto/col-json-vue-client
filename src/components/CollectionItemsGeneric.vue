@@ -25,7 +25,8 @@
       
       <div class="column" v-for="data in columnData(item.data)">
         <div class="prompt"><b>{{data.prompt}}</b></div>
-        <div class="">{{data.value}}</div>
+        <div v-if="data.type=='date'" class="">{{new Date(data.value).toLocaleDateString()}}</div>
+        <div v-else class="">{{data.value}}</div>
       </div>
       
     </div>
