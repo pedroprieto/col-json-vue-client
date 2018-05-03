@@ -14,7 +14,12 @@
         <div v-for="data in editTemplate.data" class="field">
           <label class="label" :for="data.name">{{data.prompt}}</label>
           <div class="control" v-model="data.value">
-            <input class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+            <select v-if="data.type == 'select'" class="input" name="" :id="data.name" v-model="data.value">
+              <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
+                {{op[data.suggest.text]}}
+              </option>
+              </select>
+            <input v-if="data.type != 'select'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
           </div>
         </div>
 
@@ -58,7 +63,9 @@ export default {
               {
                 name: field.name,
                 prompt: field.prompt,
-                value: d.value
+                value: d.value,
+                type: field.type,
+                suggest: field.suggest
               }
             )
           }
@@ -99,7 +106,8 @@ export default {
         .then(function (response) {
           // Emit an event to read again the collection
           // The App component will listen to the 'refresh' event and it will call the readCollection method
-          this.$emit('refresh', this.collection.href);
+          // this.$emit('refresh', this.collection.href);
+          this.$emit('refresh', response.headers.location);
           this.toggleForm();
         }.bind(this))
         .catch(e => {
