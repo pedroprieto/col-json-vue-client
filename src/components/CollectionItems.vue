@@ -5,9 +5,9 @@
   
   
   <!-- Button to add items -->
-  <div class="level">
+  <div class="level" v-if="collection.template">
       <div class="level-item ">
-        <button v-if="collection.template" @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
+        <button @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
       </div>
   </div>
 
@@ -55,6 +55,8 @@ export default {
     processLink: function(link, event) {
       // Prevent <a> element to load the url
       event.preventDefault();
+      // Hide possible visible form
+      this.editFormVisible = false;
       // Emit the event link-clicked. The App component will listen to it and it will call the readCollection function.
       this.$emit('link-clicked', link.href);
     },
