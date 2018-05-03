@@ -6,7 +6,7 @@
 
 <!-- Listening to events: https://vuejs.org/v2/guide/events.html -->
 
-<div class="section" v-if="collection.template">
+<div v-if="collection.template">
   <div v-bind:class="{'is-active': visible}" class="modal">
     <div class="modal-background" @click="toggleForm"></div>
     <div class="modal-content">
@@ -19,7 +19,9 @@
                 {{op[data.suggest.text]}}
               </option>
               </select>
-            <input v-if="data.type != 'select'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+            <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+              </textarea>
+            <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
           </div>
         </div>
 

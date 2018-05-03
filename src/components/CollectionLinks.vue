@@ -1,20 +1,9 @@
 <template>
 <div>
   
-  <!--
-      Inside this component you should display the collection.links object available in the 'links' prop.
-      
-      When the user clicks on a link, the component should emit an event to call the function "readCollection" defined in the 'App' component.
-    -->
-  
-  <!-- https://vuejs.org/v2/guide/components.html#Custom-Events -->
-  
-  <!-- Listening to events: https://vuejs.org/v2/guide/events.html -->
-  
-  <!-- Props: https://vuejs.org/v2/guide/components.html#Dynamic-Props -->
   <nav v-if="linkGroups.mainNav" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <a class="navbar-item" href="/">
         <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
       </a>
       
@@ -31,16 +20,17 @@
     </div>
   </nav> 
   
-  <div v-if="linkGroups.secondaryNav">
-    <a class="" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
-  </div>
+  <nav class="level-left" v-if="linkGroups.secondaryNav">
+    <a class="level-item" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+    <hr>
+  </nav>
   
-  <div v-if="linkGroups.upNav">
-    <a class="" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
-  </div>
+  <nav class="level-left" v-if="linkGroups.upNav">
+    <a class="level-item" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+  </nav>
 
   <!-- Pagination -->
-  <nav v-if="linkGroups.prev || linkGroups.next" class="pagination" role="navigation" aria-label="pagination">
+  <nav v-if="linkGroups.prev || linkGroups.next" class="pagination level" role="navigation" aria-label="pagination">
     <a v-if="linkGroups.prev" @click="processLink(linkGroups.prev,$event)" class="pagination-previous">{{linkGroups.prev.prompt}}</a>
     <a v-if="linkGroups.next" @click="processLink(linkGroups.next,$event)" class="pagination-next">{{linkGroups.next.prompt}}</a> 
   </nav>
