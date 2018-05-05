@@ -1,11 +1,13 @@
 <template>
 <div>
   
-  <TemplateForm @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
+  <TemplateForm v-if="collection.template && collection.type!='template'" @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
+
+  <TemplateData v-if="collection.template && collection.type=='template'" @refresh="refresh" :collection="collection" :item="selectedItem"></TemplateData>
   
   
   <!-- Button to add items -->
-  <div class="level" v-if="collection.template">
+  <div class="level" v-if="collection.template && collection.type!='template'">
       <div class="level-item ">
         <button @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
       </div>
@@ -27,6 +29,7 @@
 import axios from 'axios';
 // Import components
 import TemplateForm from './TemplateForm';
+import TemplateData from './TemplateData';
 import CollectionItemsGeneric from './CollectionItemsGeneric';
 import CollectionItemsAgenda from './CollectionItemsAgenda';
 
@@ -44,6 +47,7 @@ export default {
   },
   components: {
     TemplateForm,
+    TemplateData,
     CollectionItemsGeneric,
     CollectionItemsAgenda
   },
