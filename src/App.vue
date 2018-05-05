@@ -5,6 +5,9 @@
     <!--  links Container  -->
     <CollectionLinks :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
     
+    <!-- Queries container -->
+    <CollectionQueries :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
+    
     <!-- Template Container -->
     <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
     
@@ -33,6 +36,7 @@
 import axios from 'axios';
 // Import components
 import CollectionLinks from './components/CollectionLinks';
+import CollectionQueries from './components/CollectionQueries';
 import CollectionItems from './components/CollectionItems';
 
 export default {
@@ -67,6 +71,7 @@ export default {
   // Components used by this component
   components: {
     CollectionItems,
+    CollectionQueries,
     CollectionLinks
   },
   
@@ -78,6 +83,26 @@ export default {
 	    // url: URL of the selected link (the "href" property of the link)
 	    // http://amundsen.com/media-types/collection/format/#general
       axios.get(url)
+        .then(response => {
+          // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
+          this.c = response.data;
+          // History state
+          if (! noPush)
+	          window.history.pushState({path: url}, this.c.collection.title, url);
+        })
+        .catch(e => {
+          // If error, display in console
+          console.log(e);
+        });
+      
+    },
+    processQuery: function(query) {
+      const params = new URLSearchParams();
+      
+      for (var d of query.data) {
+        params.append(d.name, d.value);
+      }
+      axios.get(query.href + '?' + params.toString())
         .then(response => {
           // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
           this.c = response.data;
