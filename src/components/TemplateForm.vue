@@ -10,7 +10,7 @@
   <div v-bind:class="{'is-active': visible}" class="modal">
     <div class="modal-background" @click="toggleForm"></div>
     <div class="modal-content">
-      <TemplateData @refresh="refresh" :collection="collection" :item="item"></TemplateData>
+      <TemplateData @showMessage="showMessage" @refresh="refresh" :collection="collection" :item="item"></TemplateData>
     </div>
     <button @click="toggleForm" class="modal-close is-large" aria-label="close"></button>
   </div>
@@ -41,6 +41,9 @@ export default {
       this.toggleForm();
       this.$emit('refresh', url);
     },
+    showMessage: function(message) {
+      this.$emit('showMessage', message);
+    }
   }
 }
 </script>

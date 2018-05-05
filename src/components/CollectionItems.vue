@@ -1,13 +1,15 @@
 <template>
 <div>
   
-  <TemplateForm v-if="collection.template && collection.type!='template'" @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
+  <TemplateForm @showMessage="showMessage" v-if="collection.template && collection.type!='template'" @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
 
-  <TemplateData v-if="collection.template && collection.type=='template'" @refresh="refresh" :collection="collection" :item="selectedItem"></TemplateData>
+  <div v-if="collection.template && collection.type=='template'" class="container">
+    <TemplateData @showMessage="showMessage" @refresh="refresh" :collection="collection" :item="selectedItem"></TemplateData>
+  </div>
   
   
   <!-- Button to add items -->
-  <div class="level" v-if="collection.template && collection.type!='template'">
+  <div class="box container" v-if="collection.template && collection.type!='template'">
       <div class="level-item ">
         <button @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
       </div>
@@ -81,9 +83,12 @@ export default {
           // Emit an event to read again the collection
           // The App component will listen to the 'refresh' event and it will call the readCollection method
           this.$emit('refresh', this.collection.href);
+          // Show success message
+          this.$emit('showMessage', "Elemento borrado con éxito");
         }.bind(this))
         .catch(e => {
           // If error, display in console
+          this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
           console.log(e);
         });
     },
@@ -95,6 +100,9 @@ export default {
     hideEditForm: function() {
       this.editFormVisible = false;
     },
+    showMessage: function(message) {
+      this.$emit('showMessage', message);
+    }
   }
 }
 </script>

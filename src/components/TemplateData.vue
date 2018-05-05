@@ -9,8 +9,11 @@
           {{op[data.suggest.text]}}
         </option>
       </select>
-      <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+      <textarea v-else-if="data.type == 'textarea'" class="input" name="data.name" :type="data.type" :id="data.name" v-model="data.value">
       </textarea>
+      <div v-else-if="data.type == 'notification'" class="notification is-info" name="data.name" :id="data.name">
+        {{data.value}}
+      </div>
       <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
     </div>
   </div>
@@ -91,9 +94,11 @@ export default {
           // The App component will listen to the 'refresh' event and it will call the readCollection method
           // this.$emit('refresh', this.collection.href);
           this.$emit('refresh', response.headers.location);
+          this.$emit('showMessage', "Elemento creado con éxito");
         }.bind(this))
         .catch(e => {
           // If error, display in console
+          this.$emit('showMessage', "Ocurrió un error al crear el elemento");
           console.log(e);
         });
     },
@@ -109,9 +114,11 @@ export default {
           // Emit an event to read again the collection
           // The App component will listen to the 'refresh' event and it will call the readCollection method
           this.$emit('refresh', this.item.href);
+          this.$emit('showMessage', "Elemento actualizado con éxito");
         }.bind(this))
         .catch(e => {
           // If error, display in console
+          this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
           console.log(e);
         });
     }

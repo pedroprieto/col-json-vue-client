@@ -7,9 +7,22 @@
     
     <!-- Template Container -->
     <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
+    
+    <!-- Info container -->
+    <transition name="fade">
+      <article v-if="displayMessage" class="message is-info">
+        <div class="message-header">
+          <p>Info</p>
+          <!-- <button class="delete" aria-label="delete"></button> -->
+        </div>
+        <div class="message-body">
+          {{this.message}}
+        </div>
+      </article>
+    </transition>
 
     <!--  items Container  -->
-    <CollectionItems :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection"></CollectionItems>
+    <CollectionItems :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection" @showMessage="showNotificationMessage"></CollectionItems>
 
   </main>
 </div>
@@ -45,7 +58,9 @@ export default {
   data: function() {
     return {
       // This variable will store the Collection + JSON object returned by the server
-      c: null
+      c: null,
+      message: "",
+      displayMessage: false
     }
   },
   
@@ -75,11 +90,35 @@ export default {
           console.log(e);
         });
       
+    },
+    showNotificationMessage: function(message) {
+      this.message = message;
+      this.displayMessage = true;
+      setTimeout(function(){
+        this.message = "";
+        this.displayMessage = false;
+      }.bind(this), 3000);
     }
   }
 }
 </script>
 
 <style scoped>
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+}
+
+.message {
+    position: fixed;
+    margin: auto;
+    bottom: 0;
+    z-index: 20;
+    width: 80%;
+    left: 10%;
+}
 
 </style>
