@@ -17,9 +17,6 @@
       <div class="navbar-start">
         <a class="navbar-item" v-for="link in linkGroups.mainNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
       </div>
-      <div class="navbar-end">
-        <a class="navbar-item" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
-      </div>
     </div>
   </nav> 
   
@@ -30,13 +27,16 @@
         <h1 class="title">
           {{title}}
         </h1>
+        <div class="level-left">
+          <a class="level-item button" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+          <a class="level-item button" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">
+            {{link.prompt}}
+          </a>
+        </div>
       </div>
     </div>
   </section>
   
-  <nav class="level-left" v-if="linkGroups.upNav">
-    <a class="level-item" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
-  </nav>
   
   
   <!-- Pagination -->

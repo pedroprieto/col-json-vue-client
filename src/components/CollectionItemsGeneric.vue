@@ -1,12 +1,12 @@
 <template>
 <div >
-  <div class="box" v-for="item in collection.items" >
+  <div class="box container" v-for="item in collection.items" >
     
     <div class="level">
       
       <!-- Action buttons -->
-      <div class="level-left">
-        <a class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
+      <div v-if="!item.readOnly" class="level-left">
+        <a v-if="collection.template" class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
         <a class="level-item button is-info is-outlined is-small" :href="item.href" @click="processLink(item,$event)">Visitar</a>
         <a class="level-item button is-danger is-outlined is-small" @click="deleteItem(item)">Borrar</a>
       </div>
@@ -26,6 +26,7 @@
       <div class="column" v-for="data in columnData(item.data)">
         <div class="prompt"><b>{{data.prompt}}</b></div>
         <div v-if="data.type=='date'" class="">{{new Date(data.value).toLocaleDateString()}}</div>
+        <div v-else-if="data.type=='select'" class="">{{data.text}}</div>
         <div v-else class="">{{data.value}}</div>
       </div>
       
@@ -101,4 +102,9 @@ export default {
 .rowData{
     text-align: justify;
 }
+
+.box {
+    box-shadow: 10px 10px 5px grey;
+    border: 1px solid grey;
+    }
 </style>
