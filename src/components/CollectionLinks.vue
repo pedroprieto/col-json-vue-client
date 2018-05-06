@@ -27,6 +27,8 @@
         <h1 class="title">
           {{title}}
         </h1>
+        <h2 v-if="message" class="subtitle" v-html="message">
+        </h2>
         <div class="level-left">
           <a class="level-item button" v-for="link in linkGroups.secondaryNav" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
           <a class="level-item button" v-for="link in linkGroups.upNav" :href="link.href" @click="processLink(link,$event)">
@@ -57,6 +59,7 @@ export default {
   props: [
     // This prop stores the collection.links array
     'links',
+    'message',
     'title'
   ],
   data: function() {

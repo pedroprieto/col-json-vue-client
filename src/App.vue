@@ -3,7 +3,7 @@
   
   <main>
     <!--  links Container  -->
-    <CollectionLinks :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
+    <CollectionLinks :message="c.collection.message" :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
     
     <!-- Queries container -->
     <CollectionQueries :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
