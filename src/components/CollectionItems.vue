@@ -9,7 +9,7 @@
   
   
   <!-- Button to add items -->
-  <div class="box container" v-if="collection.template && collection.type!='template'">
+  <div class="box container" v-if="collection.template && collection.href && collection.type!='template'">
       <div class="level-item ">
         <button @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
       </div>

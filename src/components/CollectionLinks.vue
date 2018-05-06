@@ -4,7 +4,7 @@
   <nav v-if="linkGroups.mainNav" class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
-        <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+        <img src="/images/logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="100%" >
       </a>
       
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
