@@ -74,8 +74,12 @@ export default {
     processLink: function(link, event) {
       // Prevent <a> element to load the url
       event.preventDefault();
-      // Emit the event link-clicked. The App component will listen to it and it will call the readCollection function.
-      this.$emit('link-clicked', link.href);
+      if (link.rel == 'external') {
+        window.open(link.href, '_blank');
+      } else {
+        // Emit the event link-clicked. The App component will listen to it and it will call the readCollection function.
+        this.$emit('link-clicked', link.href);
+      }
     },
     showEditForm: function(item, event) {
       this.$emit('showEditForm', item, event);
