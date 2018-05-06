@@ -13,7 +13,7 @@
       </textarea>
       <div v-else-if="data.type == 'notification'" v-html="data.value" class="notification is-info" name="data.name" :id="data.name">
       </div>
-      <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+      <input v-else class="input" name="data.name" :type="data.type" :id="data.name" v-model="data.value">
     </div>
   </div>
   

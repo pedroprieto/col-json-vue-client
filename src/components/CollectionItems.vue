@@ -99,6 +99,7 @@ export default {
     },
     hideEditForm: function() {
       this.editFormVisible = false;
+      this.selectedItem = null;
     },
     showMessage: function(message) {
       this.$emit('showMessage', message);
