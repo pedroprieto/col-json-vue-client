@@ -23,7 +23,7 @@
       Hora
     </div>
     <div v-for="day in collection.meta.listOfDays">
-      {{day}}
+      {{new Date(day).toLocaleDateString('es',{ weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' })}}
     </div>
   </div>
   
