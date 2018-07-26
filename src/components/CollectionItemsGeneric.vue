@@ -6,7 +6,7 @@
       
       <!-- Action buttons -->
       <div v-if="!item.readOnly" class="level-left">
-        <a v-if="collection.template" class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
+        <a v-if="collection.template && collection.template.type != 'post-only'" class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
         <a class="level-item button is-info is-outlined is-small" :href="item.href" @click="processLink(item,$event)">Visitar</a>
         <a class="level-item button is-danger is-outlined is-small" @click="deleteItem(item)">Borrar</a>
       </div>
