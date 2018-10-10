@@ -9,13 +9,13 @@
           {{op[data.suggest.text]}}
         </option>
       </select>
-      <textarea v-else-if="data.type == 'textarea'" class="input" name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required">
+      <textarea v-else-if="data.type == 'textarea'" class="input" :name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required">
       </textarea>
-      <div v-else-if="data.type == 'notification'" v-html="data.value" class="notification is-info" name="data.name" :id="data.name">
+      <div v-else-if="data.type == 'notification'" v-html="data.value" class="notification is-info" :name="data.name" :id="data.name">
       </div>
       <!-- <FileComponent v-else-if="data.type == 'file'" :data="data"></FileComponent> -->
-      <input v-else-if="data.type == 'file'" multiple class="input" name="data.name" :id="data.name" type="file" @change="updateFile($event, data)" :required="data.required">
-      <input v-else class="input" name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required">
+      <input v-else-if="data.type == 'file'" multiple class="input" :name="data.name" :id="data.name" type="file" @change="updateFile($event, data)" :required="data.required">
+      <input v-else class="input" :name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required" :step="data.step" :pattern="data.match">
     </div>
   </div>
   
@@ -51,6 +51,9 @@ export default {
           prompt: field.prompt,
           type: field.type,
           value: '',
+          required: field.required,
+          step: field.step,
+          match: field.match,
           suggest: field.suggest
         }
         for (var d of this.item.data) {
