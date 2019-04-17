@@ -15,6 +15,7 @@
       </div>
       <!-- <FileComponent v-else-if="data.type == 'file'" :data="data"></FileComponent> -->
       <input v-else-if="data.type == 'file'" multiple class="input" :name="data.name" :id="data.name" type="file" @change="updateFile($event, data)" :required="data.required">
+      <input v-else-if="data.type == 'number'" class="input" :name="data.name" :type="data.type" :id="data.name" v-model.number="data.value" :required="data.required" :step="data.step" :pattern="data.match">
       <input v-else class="input" :name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required" :step="data.step" :pattern="data.match">
     </div>
   </div>
