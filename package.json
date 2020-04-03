@@ -14,7 +14,7 @@
     "@babel/core": "^7.8.7",
     "axios": "^0.19.2",
     "vue": "^2.6.11",
-    "vue-cal": "^3.0.1"
+    "vue-cal": "^3.0.2"
   },
   "devDependencies": {
     "@vue/cli-service": "~4.2.0",

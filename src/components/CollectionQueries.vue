@@ -1,27 +1,27 @@
 <template>
-<div>
-  
-  <div class="box container" v-for="query in queries">
-    <h1>{{query.prompt}}</h1>
-    <form @submit="processQuery(query, $event)">
-      <div v-for="data in query.data" class="field">
-        <label class="label" :for="data.name">{{data.prompt}}</label>
-        <div class="control" v-model="data.value">
-          <select v-if="data.type == 'select'" class="input" name="" :id="data.name" v-model="data.value">
-            <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
-              {{op[data.suggest.text]}}
-            </option>
-          </select>
-          <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
-          </textarea>
-          <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
-        </div>
-      </div>
-    </form>
-  </div>
-  
+  <div>
 
-</div>
+    <div class="box container" v-for="query in queries" v-if="query.rel.indexOf('specific') == -1">
+      <h1>{{query.prompt}}</h1>
+      <form @submit="processQuery(query, $event)">
+        <div v-for="data in query.data" class="field">
+          <label class="label" :for="data.name">{{data.prompt}}</label>
+          <div class="control" v-model="data.value">
+            <select v-if="data.type == 'select'" class="input" name="" :id="data.name" v-model="data.value">
+              <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
+                {{op[data.suggest.text]}}
+              </option>
+            </select>
+            <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+            </textarea>
+            <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+  </div>
 
 </template>
 
@@ -50,7 +50,7 @@ export default {
         }
         return res;
       }, {current: null, prev: null, next: null, other: []});
-      
+
     }
   },
   components: {

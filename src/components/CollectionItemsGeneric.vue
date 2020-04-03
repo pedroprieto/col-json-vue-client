@@ -1,48 +1,48 @@
 <template>
-<div >
-  <div class="box container" v-for="item in collection.items" >
-    
-    <div class="level">
-      
-      <!-- Action buttons -->
-      <div v-if="!item.readOnly" class="level-left">
-        <a v-if="collection.template && collection.template.type != 'post-only'" class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
-        <a class="level-item button is-info is-outlined is-small" :href="item.href" @click="processLink(item,$event)">Visitar</a>
-        <a class="level-item button is-danger is-outlined is-small" @click="deleteItem(item)">Borrar</a>
+  <div >
+    <div class="box container" v-for="item in collection.items" >
+
+      <div class="level">
+
+        <!-- Action buttons -->
+        <div v-if="!item.readOnly" class="level-left">
+          <a v-if="collection.template && collection.template.type != 'post-only'" class="level-item button is-primary is-outlined is-small" @click="showEditForm(item,$event)">Editar</a>
+          <a class="level-item button is-info is-outlined is-small" :href="item.href" @click="processLink(item,$event)">Visitar</a>
+          <a class="level-item button is-danger is-outlined is-small" @click="deleteItem(item)">Borrar</a>
+        </div>
+
+        <!-- Item links -->
+        <div class="level-right">
+          <a v-for="link in item.links" class="level-item button is-outlined is-small" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+        </div>
+
       </div>
-      
-      <!-- Item links -->
-      <div class="level-right">
-        <a v-for="link in item.links" class="level-item button is-outlined is-small" :href="link.href" @click="processLink(link,$event)">{{link.prompt}}</a>
+
+      <!-- Item data -->
+
+
+      <div class="columns">
+
+        <div class="column" v-for="data in columnData(item.data)" v-if="data.type!='hidden'">
+          <div class="prompt"><b>{{data.prompt}}</b></div>
+          <div v-if="data.type=='date'" class="">{{new Date(data.value).toLocaleDateString()}}</div>
+          <div v-else-if="data.type=='datetime'" class="">{{data.text}}</div>
+          <div v-else-if="data.type=='select'" class="">{{data.text}}</div>
+          <div v-else class="">{{data.value}}</div>
+        </div>
+
       </div>
-      
+
+      <div class="columns">
+        <div class="column" v-for="data in rowData(item.data)">
+          <div class="prompt"><b>{{data.prompt}}</b></div>
+          <div class="rowData">{{data.value}}</div>
+        </div>
+      </div>
+
     </div>
-    
-    <!-- Item data -->
-    
-    
-    <div class="columns">
-      
-      <div class="column" v-for="data in columnData(item.data)">
-        <div class="prompt"><b>{{data.prompt}}</b></div>
-        <div v-if="data.type=='date'" class="">{{new Date(data.value).toLocaleDateString()}}</div>
-        <div v-else-if="data.type=='datetime'" class="">{{data.text}}</div>
-        <div v-else-if="data.type=='select'" class="">{{data.text}}</div>
-        <div v-else class="">{{data.value}}</div>
-      </div>
-      
-    </div>
-    
-    <div class="columns">
-         <div class="column" v-for="data in rowData(item.data)">
-           <div class="prompt"><b>{{data.prompt}}</b></div>
-           <div class="rowData">{{data.value}}</div>
-         </div>
+
   </div>
-    
-  </div>
-  
-</div>
 
 </template>
 
@@ -100,16 +100,16 @@ export default {
 
 <style scoped>
 
-.prompt{
+  .prompt{
     border-bottom: 1px dotted black;
-}
+  }
 
-.rowData{
+  .rowData{
     text-align: justify;
-}
+  }
 
-.box {
+  .box {
     box-shadow: 10px 10px 5px grey;
     border: 1px solid grey;
-    }
+  }
 </style>

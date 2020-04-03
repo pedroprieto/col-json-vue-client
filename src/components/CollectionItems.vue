@@ -1,29 +1,29 @@
 <template>
-<div>
-  
-  <TemplateForm @showMessage="showMessage" v-if="collection.template && collection.type!='template'" @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
+  <div>
 
-  <div v-if="collection.template && collection.type=='template'" class="container">
-    <TemplateData @showMessage="showMessage" @refresh="refresh" :collection="collection" :item="selectedItem"></TemplateData>
-  </div>
-  
-  
-  <!-- Button to add items -->
-  <div class="box container" v-if="collection.template && collection.href && collection.type!='template'">
+    <TemplateForm @showMessage="showMessage" v-if="collection.template && collection.type!='template'" @refresh="refresh" @close="hideEditForm" :collection="collection" :visible="editFormVisible" :item="selectedItem"></TemplateForm>
+
+    <div v-if="collection.template && collection.type=='template'" class="container">
+      <TemplateData @showMessage="showMessage" @refresh="refresh" :collection="collection" :item="selectedItem"></TemplateData>
+    </div>
+
+
+    <!-- Button to add items -->
+    <div class="box container" v-if="collection.template && collection.href && collection.type!='template' && collection.template.type!='edit-only'">
       <div class="level-item ">
         <button @click="showEditForm(null, $event)" class="level-item button is-primary is-medium">Nuevo</button>
       </div>
+    </div>
+
+    <CollectionItemsAgenda v-if="collection.type && collection.type=='agenda'" @query-sent="processQuery" :collection="collection" @link-clicked="refresh" @refresh="refresh" @showMessage="showMessage" @deleteItem="deleteItem">
+
+    </CollectionItemsAgenda>
+
+    <CollectionItemsGeneric v-else :collection="collection" @deleteItem="deleteItem" @showEditForm="showEditForm" @link-clicked="refresh" @refresh="refresh">
+
+    </CollectionItemsGeneric>
+
   </div>
-
-  <CollectionItemsAgenda v-if="collection.type && collection.type=='agenda'" :collection="collection" @link-clicked="refresh" @refresh="refresh">
-
-  </CollectionItemsAgenda>
-
-  <CollectionItemsGeneric v-else :collection="collection" @deleteItem="deleteItem" @showEditForm="showEditForm" @link-clicked="refresh" @refresh="refresh">
-
-  </CollectionItemsGeneric>
-
-</div>
 
 </template>
 
@@ -54,6 +54,9 @@ export default {
     CollectionItemsAgenda
   },
   methods: {
+    processQuery: function(query,event) {
+      this.$emit('query-sent', query);
+    },
     // Function to process the click event on a link
     // https://vuejs.org/v2/guide/events.html#Methods-in-Inline-Handlers
     // link: the link clicked
@@ -79,23 +82,23 @@ export default {
 	    // http://amundsen.com/media-types/collection/format/#general
       if (confirm("Ready to delete?") === true)
         axios.delete(item.href)
-        .then(function (response) {
-          // Emit an event to read again the collection
-          // The App component will listen to the 'refresh' event and it will call the readCollection method
-          this.$emit('refresh', this.collection.href);
-          // Show success message
-          this.$emit('showMessage', "Elemento borrado con éxito");
-        }.bind(this))
-        .catch(e => {
-          // If error, display in console
-          this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
-          console.log(e);
-        });
+             .then(function (response) {
+               // Emit an event to read again the collection
+               // The App component will listen to the 'refresh' event and it will call the readCollection method
+               this.$emit('refresh', this.collection.href);
+               // Show success message
+               this.$emit('showMessage', "Elemento borrado con éxito");
+             }.bind(this))
+             .catch(e => {
+               // If error, display in console
+               this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
+               console.log(e);
+             });
     },
     showEditForm: function(item, $event) {
       this.selectedItem = item;
       this.editFormVisible = true;
-      
+
     },
     hideEditForm: function() {
       this.editFormVisible = false;

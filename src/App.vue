@@ -1,34 +1,34 @@
 <template>
-<div id="app">
-  
-  <main>
-    <!--  links Container  -->
-    <CollectionLinks :message="c.collection.message" :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
-    
-    <!-- Queries container -->
-    <CollectionQueries :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
-    
-    <!-- Template Container -->
-    <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
-    
-    <!-- Info container -->
-    <transition name="fade">
-      <article v-if="displayMessage" class="message is-info">
-        <div class="message-header">
-          <p>Info</p>
-          <!-- <button class="delete" aria-label="delete"></button> -->
-        </div>
-        <div class="message-body">
-          {{this.message}}
-        </div>
-      </article>
-    </transition>
+  <div id="app">
 
-    <!--  items Container  -->
-    <CollectionItems :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection" @showMessage="showNotificationMessage"></CollectionItems>
+    <main>
+      <!--  links Container  -->
+      <CollectionLinks :message="c.collection.message" :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
 
-  </main>
-</div>
+      <!-- Queries container -->
+      <CollectionQueries :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
+
+      <!-- Template Container -->
+      <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
+
+      <!-- Info container -->
+      <transition name="fade">
+        <article v-if="displayMessage" class="message is-info">
+          <div class="message-header">
+            <p>Info</p>
+            <!-- <button class="delete" aria-label="delete"></button> -->
+          </div>
+          <div class="message-body">
+            {{this.message}}
+          </div>
+        </article>
+      </transition>
+
+      <!--  items Container  -->
+      <CollectionItems @query-sent="processQuery" :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection" @showMessage="showNotificationMessage"></CollectionItems>
+
+    </main>
+  </div>
 </template>
 
 <script>
@@ -41,7 +41,7 @@ import CollectionItems from './components/CollectionItems';
 
 export default {
   name: 'App',
-  
+
   // Initialization:
   // Function that runs when the component is created
 	// When the app ploads, it connects to the entry point of the API, "/api", to get a collection object
@@ -57,7 +57,7 @@ export default {
       }.bind(this);
     }
   },
-  
+
   // Component data
   data: function() {
     return {
@@ -67,14 +67,14 @@ export default {
       displayMessage: false
     }
   },
-  
+
   // Components used by this component
   components: {
     CollectionItems,
     CollectionQueries,
     CollectionLinks
   },
-  
+
   // Methods
   methods: {
     readCollection: function(url, noPush) {
@@ -83,38 +83,40 @@ export default {
 	    // url: URL of the selected link (the "href" property of the link)
 	    // http://amundsen.com/media-types/collection/format/#general
       axios.get(url)
-        .then(response => {
-          // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
-          this.c = response.data;
-          // History state
-          if (! noPush)
-	          window.history.pushState({path: url}, this.c.collection.title, url);
-        })
-        .catch(e => {
-          // If error, display in console
-          console.log(e);
-        });
-      
+           .then(response => {
+             // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
+             this.c = response.data;
+             // History state
+             if (! noPush)
+	             window.history.pushState({path: url}, this.c.collection.title, url);
+           })
+           .catch(e => {
+             // If error, display in console
+             console.log(e);
+           });
+
     },
     processQuery: function(query) {
       const params = new URLSearchParams();
-      
+
       for (var d of query.data) {
         params.append(d.name, d.value);
       }
-      axios.get(query.href + '?' + params.toString())
-        .then(response => {
-          // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
-          this.c = response.data;
-          // History state
-          if (! noPush)
-	          window.history.pushState({path: url}, this.c.collection.title, url);
-        })
-        .catch(e => {
-          // If error, display in console
-          console.log(e);
-        });
-      
+
+      const urlQuery = query.href + '?' + params.toString();
+
+      axios.get(urlQuery)
+           .then(response => {
+             // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
+             this.c = response.data;
+             // History state
+	           window.history.pushState({path: urlQuery}, this.c.collection.title, urlQuery);
+           })
+           .catch(e => {
+             // If error, display in console
+             console.log(e);
+           });
+
     },
     showNotificationMessage: function(message) {
       this.message = message;
@@ -130,20 +132,20 @@ export default {
 
 <style scoped>
 
-.fade-enter-active, .fade-leave-active {
+  .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
-}
+  }
 
-.message {
+  .message {
     position: fixed;
     margin: auto;
     bottom: 0;
     z-index: 20;
     width: 80%;
     left: 10%;
-}
+  }
 
 </style>
