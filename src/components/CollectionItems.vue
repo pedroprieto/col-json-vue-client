@@ -71,8 +71,6 @@ export default {
     },
     // Function that runs to reload the item.url after an item update
     refresh: function(url) {
-      console.log(url);
-      console.log('refresh');
       this.$emit('refresh', url);
     },
     deleteItem: function(item) {
