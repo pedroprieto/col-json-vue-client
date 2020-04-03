@@ -48,7 +48,11 @@ export default {
 	// The collection object is stored in "c"
   created: function() {
     // AJAX request to /api (entry point of the app)
-    this.readCollection('/api');
+    if (process.env.NODE_ENV == 'test') {
+      this.readCollection('/api');
+    } else {
+      this.readCollection(window.location);
+    }
     // History back
     // Attach onpopstate event handler
     if (typeof window !== 'undefined') {
