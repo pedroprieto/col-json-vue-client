@@ -1,7 +1,7 @@
 <template>
   <div id="app">
 
-    <main>
+    <main v-if="c">
       <!--  links Container  -->
       <CollectionLinks :message="c.collection.message" :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
 
