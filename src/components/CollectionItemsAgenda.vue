@@ -91,9 +91,11 @@ export default {
         it.editTemplate = Object.assign({}, this.collection.template);
 
         if (el.group == "consultation") {
-          it.startDate = new Date(it.start);
-          it.endDate = new Date(it.end);
+          it.start = new Date(it.start);
+          it.end = new Date(it.end);
           it.class = it.kind;
+          if (el.readOnly)
+            it.draggable = false;
           res.events.push(it);
         } else if (el.group == "availableHour") {
           it.daysOfWeek = [it.daysOfWeek];
@@ -114,7 +116,7 @@ export default {
     dropEvent: function(info) {
       for (var d of info.event.editTemplate.data) {
         if (d.name == 'date')
-          d.value = info.event.startDate.toISOString();
+          d.value = info.event.start.toISOString();
       }
       // Update
       var editTemplate = {
@@ -142,7 +144,7 @@ export default {
       } else {
         // Creating an event
         // Look for 'searchpatient' query
-        var roundedDate = event.startDate;
+        var roundedDate = event.start;
         var hour = roundedDate.getHours();
         var minutes = roundedDate.getMinutes();
         if (minutes > 30) {
