@@ -6,7 +6,7 @@
       <CollectionLinks :message="c.collection.message" :title="c.collection.title" :links="c.collection.links" @link-clicked="readCollection"></CollectionLinks>
 
       <!-- Queries container -->
-      <CollectionQueries :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
+      <CollectionQueries :related="c.collection.related" :queries="c.collection.queries" @query-sent="processQuery"></CollectionQueries>
 
       <!-- Template Container -->
       <!-- <CollectionTemplate :createurl="c.collection.href" :template="c.collection.template" @refresh="readCollection"></CollectionTemplate> -->
@@ -25,7 +25,7 @@
       </transition>
 
       <!--  items Container  -->
-      <CollectionItems @query-sent="processQuery" :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection" @showMessage="showNotificationMessage"></CollectionItems>
+      <CollectionItems :itemsReady="itemsReady" @query-sent="processQuery" :collection="c.collection" @link-clicked="readCollection" @refresh="readCollection" @showMessage="showNotificationMessage"></CollectionItems>
 
     </main>
   </div>
@@ -68,7 +68,8 @@ export default {
       // This variable will store the Collection + JSON object returned by the server
       c: null,
       message: "",
-      displayMessage: false
+      displayMessage: false,
+      itemsReady: false
     }
   },
 
@@ -86,10 +87,12 @@ export default {
 	    // It must be called when the user clicks on a LINK
 	    // url: URL of the selected link (the "href" property of the link)
 	    // http://amundsen.com/media-types/collection/format/#general
+      this.itemsReady = false;
       axios.get(url)
            .then(response => {
              // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
              this.c = response.data;
+             this.itemsReady = true;
              // History state
              if (! noPush)
 	             window.history.pushState({path: url}, this.c.collection.title, url);
@@ -102,6 +105,8 @@ export default {
     },
     processQuery: function(query) {
       const params = new URLSearchParams();
+      // For charts to work with updated data from query
+      this.itemsReady = false;
 
       for (var d of query.data) {
         params.append(d.name, d.value);
@@ -113,6 +118,7 @@ export default {
            .then(response => {
              // If success, store data returned by the server (the collection + JSON object) in the 'c' property of the component
              this.c = response.data;
+             this.itemsReady = true;
              // History state
 	           window.history.pushState({path: urlQuery}, this.c.collection.title, urlQuery);
            })

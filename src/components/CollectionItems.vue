@@ -19,7 +19,7 @@
 
     </CollectionItemsAgenda>
 
-    <CollectionItemsGeneric v-else :collection="collection" @deleteItem="deleteItem" @showEditForm="showEditForm" @link-clicked="refresh" @refresh="refresh">
+    <CollectionItemsGeneric v-else-if="itemsReady" :collection="collection" @deleteItem="deleteItem" @showEditForm="showEditForm" @link-clicked="refresh" @refresh="refresh">
 
     </CollectionItemsGeneric>
 
@@ -39,6 +39,7 @@ export default {
   name: 'CollectionItems',
   props: [
     // This prop stores the collection object
+    'itemsReady',
     'collection'
   ],
   data: function() {

@@ -1,22 +1,40 @@
 <template>
   <div>
-
     <div class="box container" v-for="query in queries" v-if="query.rel.indexOf('specific') == -1">
-      <h1>{{query.prompt}}</h1>
-      <form @submit="processQuery(query, $event)">
-        <div v-for="data in query.data" class="field">
-          <label class="label" :for="data.name">{{data.prompt}}</label>
-          <div class="control" v-model="data.value">
-            <select v-if="data.type == 'select'" class="input" name="" :id="data.name" v-model="data.value">
-              <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
-                {{op[data.suggest.text]}}
-              </option>
-            </select>
-            <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
-            </textarea>
-            <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+      <h2 class="subtitle is-4">{{query.prompt}}</h2>
+      <form @submit="processQuery(query, $event)" class="">
+        <div class="field is-horizontal">
+          <div class="field-body">
+            <div v-for="data in query.data" class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label is-normal" :for="data.name">{{data.prompt}}</label>
+              </div>
+              <div class="field-body field">
+                <div class="field">
+                  <div class="control is-expanded" v-model="data.value">
+                    <div class="select is-fullwidth" v-if="data.type == 'select'" >
+                      <select name="" :id="data.name" v-model="data.value">
+                        <option v-for="op in related[data.suggest.related]" :value="op[data.suggest.value]">
+                          {{op[data.suggest.text]}}
+                        </option>
+                      </select>
+                    </div>
+
+                    <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+                    </textarea>
+                    <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-primary is-fullwidth" name="" type="submit" value="">Enviar</button>
+              </div>
+            </div>
           </div>
         </div>
+
       </form>
     </div>
 
@@ -30,7 +48,8 @@
 export default {
   name: 'CollectionQueries',
   props: [
-    'queries'
+    'queries',
+    'related'
   ],
   data: function() {
     return {

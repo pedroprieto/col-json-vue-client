@@ -20,8 +20,12 @@
 
       <!-- Item data -->
 
+      <div class="chart" v-if="item.type && item.type.indexOf('chart') != -1  && item.type.indexOf('line') != -1">
+        <ChartLine :item="item"></ChartLine>
+      </div>
 
-      <div class="columns">
+      <div class="columns" v-else>
+
 
         <div class="column" v-for="data in columnData(item.data)" v-if="data.type!='hidden'">
           <div class="prompt"><b>{{data.prompt}}</b></div>
@@ -47,6 +51,8 @@
 </template>
 
 <script>
+import ChartLine from './ChartLine'
+
 export default {
   name: 'CollectionItemsGeneric',
   props: [
@@ -58,8 +64,7 @@ export default {
     }
   },
   components: {
-  },
-  computed: {
+    ChartLine
   },
   methods: {
     columnData: function(data) {
@@ -110,6 +115,8 @@ export default {
 
   .box {
     box-shadow: 10px 10px 5px grey;
-    border: 1px solid grey;
+  }
+  .chart {
+    position: relative;
   }
 </style>
