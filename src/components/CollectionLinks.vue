@@ -24,7 +24,7 @@
     <section class="hero is-light">
       <div class="hero-body">
         <div class="container">
-          <h1 class="title">
+          <h1 class="title is-2">
             {{title}}
           </h1>
           <h2 v-if="message" class="subtitle" v-html="message">
