@@ -94,8 +94,8 @@ export default {
           it.start = new Date(it.start);
           it.end = new Date(it.end);
           it.class = it.kind;
-          if (el.readOnly)
-            it.draggable = false;
+          // if (el.readOnly)
+          //   it.draggable = false;
           res.events.push(it);
         } else if (el.group == "availableHour") {
           it.daysOfWeek = [it.daysOfWeek];
@@ -109,33 +109,64 @@ export default {
     }
   },
   methods: {
+    createTemplate(el, newDate) {
+      var e = {};
+      e.data = [];
+      for (var field of this.collection.template.data) {
+        var f = {
+          name: field.name,
+          value: '',
+        }
+        if (f.name == 'date') {
+          f.value = newDate;
+        } else {
+          for (var d of el.data) {
+            if (d.name == field.name) {
+              f.value = d.value;
+              break;
+            }
+          }
+        }
+        e.data.push(f);
+      }
+      return e;
+    },
     eventClick(event, e) {
       this.$emit('link-clicked', event.origItem.href);
       e.stopPropagation()
     },
     dropEvent: function(info) {
-      for (var d of info.event.editTemplate.data) {
-        if (d.name == 'date')
-          d.value = info.event.start.toISOString();
-      }
-      // Update
-      var editTemplate = {
-        template: info.event.editTemplate
-      }
-      axios.put(info.event.href, editTemplate)
-           .then(function (response) {
-             // Emit an event to read again the collection
-             // The App component will listen to the 'refresh' event and it will call the readCollection method
-             // this.$emit('refresh', response.headers.location || location.href);
-             this.$emit('refresh', window.location.href);
-             this.$emit('showMessage', "Elemento actualizado con éxito");
-           }.bind(this))
-           .catch(e => {
-             // If error, display in console
-             this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
-             console.log(e);
-           });
+      var template = {template: this.createTemplate(info.event.origItem, info.newDate)};
+      if (event.ctrlKey) {
+        // Copy event: create a new one with data copied from original
+        axios.post(this.collection.href, template)
+             .then(function (response) {
+               this.$emit('refresh', window.location.href);
+               this.$emit('showMessage', "Elemento creado con éxito");
+             }.bind(this))
+             .catch(e => {
+               this.$emit('showMessage', "Ocurrió un error al crear el elemento");
+               console.log(e);
+             });
+        // Hacer un post con template
+      } else {
+        // Move event: update original
+        if (info.event.origItem.readOnly) {
+          this.$emit('showMessage', 'No puedes mover una consulta facturada o asociada a bono');
+          this.$emit('refresh', window.location.href);
+        } else {
+          axios.put(info.event.href, template)
+               .then(function (response) {
+                 this.$emit('refresh', window.location.href);
+                 this.$emit('showMessage', "Elemento actualizado con éxito");
+               }.bind(this))
+               .catch(e => {
+                 this.$emit('showMessage', "Ocurrió un error al actualizar el elemento");
+                 console.log(e);
+               });
 
+        }
+      }
     },
     createEvent: function(event,b) {
       if (typeof event.origItem !== 'undefined') {
@@ -216,5 +247,8 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .vuecal__event--static {
+    opacity: 0.5 !important;
   }
 </style>
