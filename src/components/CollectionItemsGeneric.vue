@@ -32,7 +32,7 @@
           <div v-if="data.type=='date'" class="">{{new Date(data.value).toLocaleDateString()}}</div>
           <div v-else-if="data.type=='datetime'" class="">{{data.text}}</div>
           <div v-else-if="data.type=='select'" class="">{{data.text}}</div>
-          <div v-else class="">{{data.value}}</div>
+          <div v-else class="">{{data.text || data.value}}</div>
         </div>
 
       </div>
