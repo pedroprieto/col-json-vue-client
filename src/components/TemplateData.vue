@@ -60,6 +60,7 @@ export default {
         for (var d of this.item.data) {
           if (d.name == field.name) {
             f.value = d.value;
+            break;
           }
         }
         e.data.push(f);
