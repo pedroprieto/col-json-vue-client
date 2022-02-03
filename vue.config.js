@@ -13,6 +13,11 @@ module.exports = {
         ws: true,
         changeOrigin: false,
       },
+      '/assets': {
+        target: 'http://localhost:3000',
+        ws: true,
+        changeOrigin: false,
+      },
     },
   }
 }
