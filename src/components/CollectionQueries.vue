@@ -22,6 +22,7 @@
 
                     <textarea v-else-if="data.type == 'textarea'" class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
                     </textarea>
+                    <input v-else-if="data.type == 'checkbox'" class="checkbox" name="" :type="data.type" :id="data.name" v-model="data.value">
                     <input v-else class="input" name="" :type="data.type" :id="data.name" v-model="data.value">
                   </div>
                 </div>

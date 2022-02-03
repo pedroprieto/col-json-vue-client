@@ -2,26 +2,44 @@
 
   <form class="box" @submit="createOrUpdate($event)">
     <div v-for="data in editTemplate.data" class="field">
-      <label class="label" :for="data.name">{{data.prompt}}</label>
-      <div class="control" v-model="data.value">
-        <select v-if="data.type == 'select'" class="input" name="" :id="data.name" v-model="data.value" :required="data.required">
-          <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
-            {{op[data.suggest.text]}}
-          </option>
-        </select>
+      <label v-if="(data.type!='checkbox') && (data.type!='radio')" class="label" :for="data.name">{{data.prompt}}</label>
+      <div class="control">
+        <div v-if="data.type.indexOf('select') > -1" :class="{ select: true, 'is-multiple': data.type=='select-multiple' }">
+          <select :multiple="data.type=='select-multiple'" name="" :id="data.name" v-model="data.value" :required="data.required">
+            <option v-for="op in collection.related[data.suggest.related]" :value="op[data.suggest.value]">
+              {{op[data.suggest.text]}}
+            </option>
+          </select>
+        </div>
         <textarea v-else-if="data.type == 'textarea'" class="input" :name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required">
         </textarea>
         <div v-else-if="data.type == 'notification'" v-html="data.value" class="notification is-info" :name="data.name" :id="data.name">
         </div>
         <!-- <FileComponent v-else-if="data.type == 'file'" :data="data"></FileComponent> -->
-        <input v-else-if="data.type == 'file'" multiple class="input" :name="data.name" :id="data.name" type="file" @change="updateFile($event, data)" :required="data.required">
+        <div v-else-if="data.type.indexOf('file') > -1" class="file">
+          <label class="file-label">
+            <input class="file-input" type="file" :name="data.name" :id="data.name" :multiple="data.type == 'file-multiple'" @change="updateFile($event, data)" :required="data.required">
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="ion-upload"></i>
+              </span>
+              <span class="file-label">
+                Elija un archivo
+              </span>
+            </span>
+          </label>
+        </div>
         <input v-else-if="data.type == 'number'" class="input" :name="data.name" :type="data.type" :id="data.name" v-model.number="data.value" :required="data.required" :step="data.step" :pattern="data.match">
+        <label v-else-if="(data.type == 'checkbox') || (data.type == 'radio')" :class="data.type">
+          <input :type="data.type">
+          {{data.prompt}}
+        </label>
         <input v-else class="input" :name="data.name" :type="data.type" :id="data.name" v-model="data.value" :required="data.required" :step="data.step" :pattern="data.match">
       </div>
     </div>
 
     <div class="field has-text-centered">
-      <input type="submit" class="button"></input>
+      <input type="submit" class="button is-primary"></input>
     </div>
   </form>
 
@@ -135,8 +153,9 @@ export default {
            }.bind(this))
            .catch(e => {
              // If error, display in console
-             this.$emit('showMessage', "Ocurrió un error al crear el elemento");
-             console.log(e);
+             // this.$emit('showMessage', "Ocurrió un error al crear el elemento");
+             this.$emit('showMessage', e.response.data.collection.error.message);
+             console.log(e.response.data.collection.error.message);
            });
     },
     updateItem: function() {
